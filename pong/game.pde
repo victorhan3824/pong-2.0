@@ -45,12 +45,17 @@ void game() {
   scoreDetermine();
   display();
   //gameover ========================================================
-  if (redScore == 3 || blueScore == 3) mode = GAMEOVER;
+  if (redScore == 3 || blueScore == 3) {
+    mode = GAMEOVER;
+    //reset the winner sound
+    win.rewind();
+  }
 }
 
 void gameClick() {
   if (mouseX > width/2-height/24 && mouseX < width/2+height/24 && mouseY > height/8-height/12 && mouseY < height/8+height/24) {
     mode = PAUSE;  
+    theme.pause();
   }
 }
 
@@ -75,23 +80,37 @@ void bounceAway() {
   if (dist(redX,redY,ballX,ballY) <= pD/2 + bD/2) { //===
     vx = (ballX - redX)/10;
     vy = (ballY - redY)/10;
+    bump.rewind();
+    bump.play();
   }
    if (dist(blueX,blueY,ballX,ballY) <= pD/2 + bD/2) { //==
     vx = (ballX - blueX)/10;
     vy = (ballY - blueY)/10;
+    bump.rewind();
+    bump.play();
   }
   //bounce off the walls ==================================
-  if (ballY < bD/2 || ballY > height-bD/2 ) vy = vy * -1;
+  if (ballY < bD/2 || ballY > height-bD/2 ) {
+    bounce.rewind();
+    bounce.play();
+    vy = vy * -1;
+  }
 }
 
 void scoreDetermine() {
   //determining scoring ===================================
   if (ballX <= -bD) {
+    goal.rewind();
+    goal.play();
+    
     blueScore = blueScore + 1;
     timer = 50; 
     if (blueScore < 3) roundReset();
   }  
   if (ballX >= width+bD) { //===================================
+    goal.rewind();
+    goal.play();
+  
     redScore = redScore + 1;//
     timer = 50; //==============
     if (redScore < 3) roundReset();
@@ -108,7 +127,7 @@ void roundReset() {
   if (leftRight > 0.5) {
     angle += PI; 
   }
-  float hyp = 5;
+  float hyp = 7;
   vx = cos(angle)*hyp;
   vy = sin(angle)*hyp;
   // =============================================

@@ -1,4 +1,6 @@
 void intro() {
+  theme.play();
+  
   background(orange);
   fill(white);
   textSize(logoSize);
